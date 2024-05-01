@@ -29,3 +29,4 @@ f.flush()
 foo
 ```
 
+Why? Writing pushes up to the buffer. Flushing it puts it out.
