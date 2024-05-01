@@ -1,3 +1,8 @@
+"""
+This program will "beep" (Bell ASCII character)
+for how many times the number the user enters in stdin.
+"""
+
 import sys
 import time
 
