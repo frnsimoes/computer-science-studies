@@ -18,5 +18,6 @@ while True:
 
     conn.send(b'HTTP/1.1 200 OK\r\n\r\n')
     print(headers)
+    print(body)
     conn.send(json.dumps(d, indent=4).encode('ascii'))
     conn.close()
