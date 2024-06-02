@@ -31,35 +31,48 @@ log(f"Accepting new connections on {PROXY_ADDR}")
 
 while True:
     # This is a way to accept multiple connections without closing the connection after the first one is closed.
-    client_sock, client_addr = s.accept()
-    log(f"New connection from {client_addr}")
+    try:
+        client_sock, client_addr = s.accept()
+        log(f"New connection from {client_addr}")
 
-    # 4096 is the maximum message size.
-    # We have a buffer which the OS can fill with data that it has received.
-    # This is not saying that packet I receive can be as large as this
-    # This is also not saying that the http message will have 4096 bytes.
-    # This is an independente maximum buffer size that the OS will fill for us in calling recv.
-    data = client_sock.recv(4096)
-    log(f"-> *    {len(data)}B")
+        # 4096 is the maximum message size.
+        # We have a buffer which the OS can fill with data that it has received.
+        # This is not saying that packet I receive can be as large as this
+        # This is also not saying that the http message will have 4096 bytes.
+        # This is an independente maximum buffer size that the OS will fill for us in calling recv.
+        data = client_sock.recv(4096)
+        log(f"-> *    {len(data)}B")
 
-    upstream_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    upstream_sock.connect(UPSTREAM_ADDR)
-    log(f"Connected to {UPSTREAM_ADDR}")
-    upstream_sock.send(data)
-    log(f"    * -> {len(data)}B")
+        upstream_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        upstream_sock.connect(UPSTREAM_ADDR)
+        log(f"Connected to {UPSTREAM_ADDR}")
+        upstream_sock.send(data)
+        log(f"    * -> {len(data)}B")
 
-    while True:
-        res = upstream_sock.recv(4096)
-        log(f"    * <- {len(res)}B")
+        while True:
+            res = upstream_sock.recv(4096)
+            log(f"    * <- {len(res)}B")
 
-        if not res:
-            break
+            if not res:
+                break
 
-        client_sock.send(res)
-        log(f"<- *    {len(res)}B")
+            client_sock.send(res)
+            log(f"<- *    {len(res)}B")
 
-    close(upstream_sock)
-    close(client_sock)
+    except ConnectionRefusedError:
+        # If the upstream server is down, send a 502 to the client.
+        with open('502.html', 'r') as file:
+            html_content = file.read()
+        response = 'HTTP/1.1 502 Bad Gateway\r\nContent-Type: text/html\r\n\r\n' + html_content
+        client_sock.send(response.encode())
+        log('<- *    BAD GATEWAY')
+
+    except OSError as msg:
+        log(msg)
+
+    finally:
+        close(upstream_sock)
+        close(client_sock)
 
 close(s)
 
