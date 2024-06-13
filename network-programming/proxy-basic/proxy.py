@@ -1,5 +1,5 @@
 """
-How to run: 
+How to run:
     `python http.server 8778` (upstream socket port)
     `python proxy.py`
     `curl 127.0.0.1:8777` (proxy port)
@@ -7,6 +7,7 @@ How to run:
 Notes:
     python http.server will run a socket server with the static files that exist in the directory.
 """
+
 import socket
 import sys
 
@@ -18,10 +19,12 @@ UPSTREAM_ADDR = ("127.0.0.1", 8778)
 def log(s):
     print(s, file=sys.stderr)
 
+
 def close(s):
-   # close will close the connection and 'unbind' the socket from the port, so the OS won't prevent (30 seconds?) the rebinding. 
-   s.close() 
-   s.detach()
+    # close will close the connection and 'unbind' the socket from the port, so the OS won't prevent (30 seconds?) the rebinding.
+    s.close()
+    s.detach()
+
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind(PROXY_ADDR)
@@ -61,11 +64,13 @@ while True:
 
     except ConnectionRefusedError:
         # If the upstream server is down, send a 502 to the client.
-        with open('502.html', 'r') as file:
+        with open("502.html", "r") as file:
             html_content = file.read()
-        response = 'HTTP/1.1 502 Bad Gateway\r\nContent-Type: text/html\r\n\r\n' + html_content
+        response = (
+            "HTTP/1.1 502 Bad Gateway\r\nContent-Type: text/html\r\n\r\n" + html_content
+        )
         client_sock.send(response.encode())
-        log('<- *    BAD GATEWAY')
+        log("<- *    BAD GATEWAY")
 
     except OSError as msg:
         log(msg)
@@ -75,5 +80,3 @@ while True:
         close(client_sock)
 
 close(s)
-
-
