@@ -15,6 +15,7 @@ How to run:
 
 import socket
 import sys
+import parser
 
 
 PROXY_ADDR = ("0.0.0.0", 8777)
@@ -37,8 +38,8 @@ s.listen(10)  # number of maxmium queued connections the socket should hold.
 log(f"Accepting new connections on {PROXY_ADDR}")
 
 
+# This is a way to accept multiple connections without closing the connection after the first one is closed.
 while True:
-    # This is a way to accept multiple connections without closing the connection after the first one is closed.
     try:
         client_sock, client_addr = s.accept()
         log(f"New connection from {client_addr}")

@@ -20,9 +20,9 @@ class HttpState(Enum):
 class HttpRequest:
     def __init__(self):
         self.headers = {}
-        self.residual = b''
+        self.residual = b""
         self.state = HttpState.START
-        self.body = b''
+        self.body = b""
 
     def is_request_line_end(self, request_line):
         """
@@ -32,12 +32,14 @@ class HttpRequest:
         = b'GET / HTTP/1.0\r\n'
         """
 
-        if request_line[-1:] != b'\n':
+        if request_line[-1:] != b"\n":
             self.residual = request_line
             return True
         return False
 
-    def check_headers(self, ):
+    def check_headers(
+        self,
+    ):
         """
         https://www.rfc-editor.org/rfc/rfc9112#name-field-line-parsing
 
@@ -47,17 +49,14 @@ class HttpRequest:
         """
         pass
 
-
-
-
     def parse(self, data):
         bs = io.BytesIO(self.residual + data)
 
         if self.state is HttpState.START:
             request_line = bs.readline()
-            if request_line[-1:] != b'\n':
+            if request_line[-1:] != b"\n":
                 self.residual = request_line
-                return  
+                return
 
             self.method, self.uri, self.version = request_line.rstrip().split(b" ")
             self.state = HttpState.HEADERS
@@ -68,12 +67,12 @@ class HttpRequest:
                 # check: headers()
                 if not field_line:
                     break
-                if field_line[-1:] != b'\n':
+                if field_line[-1:] != b"\n":
                     self.residual = field_line
-                    break 
-                if field_line == b'\r\n' or field_line == b'\n':
+                    break
+                if field_line == b"\r\n" or field_line == b"\n":
                     print(self.method)
-                    if self.method == b'GET':
+                    if self.method == b"GET":
                         self.state = HttpState.END
                     else:
                         self.state = HttpState.BODY
@@ -83,7 +82,7 @@ class HttpRequest:
                 self.headers[field_name.lower()] = field_value
 
         if self.state is HttpState.BODY:
-           self.body += bs.read()
+            self.body += bs.read()
 
 
 if __name__ == "__main__":
@@ -97,16 +96,16 @@ if __name__ == "__main__":
     assert len(req.headers) == 2
 
     post_req = HttpRequest()
-    post_req.parse(b'POST / HTTP/1.0\r\n\r\nfoo')
+    post_req.parse(b"POST / HTTP/1.0\r\n\r\nfoo")
     assert post_req.state == HttpState.BODY
-    assert post_req.body == b'foo'
+    assert post_req.body == b"foo"
 
     # parse something else to check if it is appended to the body
-    post_req.parse(b'bar')
-    assert post_req.body == b'foobar'
+    post_req.parse(b"bar")
+    assert post_req.body == b"foobar"
 
     # if it's a GET, ignore the body
     get_req = HttpRequest()
-    get_req.parse(b'GET / HTTP/1.0\r\n\r\nfoo')
+    get_req.parse(b"GET / HTTP/1.0\r\n\r\nfoo")
     assert get_req.state == HttpState.END
-    assert get_req.body == b''
+    assert get_req.body == b""
