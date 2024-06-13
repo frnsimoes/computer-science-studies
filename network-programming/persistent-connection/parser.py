@@ -58,6 +58,8 @@ class HttpRequest:
                 self.residual = request_line
                 return
 
+            print("printing reuqest_line", request_line)
+
             self.method, self.uri, self.version = request_line.rstrip().split(b" ")
             self.state = HttpState.HEADERS
 
@@ -77,8 +79,9 @@ class HttpRequest:
                     else:
                         self.state = HttpState.BODY
                     break
-
-                field_name, field_value = field_line.rstrip().split(b":")
+                
+                print("printing split", field_line.rstrip().split(b":"))
+                field_name, field_value = field_line.rstrip().split(b": ") # must have a white space to avoid localhost:8888 from spliting.
                 self.headers[field_name.lower()] = field_value
 
         if self.state is HttpState.BODY:
