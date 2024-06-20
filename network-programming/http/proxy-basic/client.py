@@ -19,9 +19,4 @@ while True:
 
 print(response.decode())
 
-
-# print(response.decode())
-#
-# response = client_sock.recv(1024)
-# print(response.decode())
 client_sock.close()
