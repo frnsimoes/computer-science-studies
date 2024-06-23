@@ -44,3 +44,14 @@ Access: 2024-06-22 16:52:42.909805004 +0000
 ```
 
 Now we have `Blocks: 16`. The OS "allocated" (virtualized?) 8 new blocks for a file with 4097 bytes.
+
+Why 8 blocks?
+
+8 blocks is a measurement unit. Blocks are counted in 512 bytes unities.
+
+
+**What is the size of the file on disk?**
+
+If the file has Size: 2, say, and the OS allocated 8 blocks (`8*512`) for it, the size of the file on disk is 4096 bytes.
+
+If the file has Size: 4097, and the OS allocated 16 blocks (`16*512`), the size of the file on disk is 8192 bytes.
