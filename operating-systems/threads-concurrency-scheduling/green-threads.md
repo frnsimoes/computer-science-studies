@@ -21,3 +21,6 @@ Nodejs: the nodejs runtime is only one process. The async is operating in only o
 Asyncio Python library: the same thing happens.
 
 Goroutines: One go program, running as a process, has actual posix threads. However, it's the Go runtime that maps the goroutines in threads.
+
+Process is an abstraction over an address space. A thread is an abstraction over a thing that can be run. Green threads evokes what is a POSIX thread is all about, but rather than having the OS schedule this thing, it's another high level scheduler 
+
