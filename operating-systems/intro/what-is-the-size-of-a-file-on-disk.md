@@ -6,7 +6,7 @@ From manpage:
 I'm mostly interested in two of the metadata information: Block and Block IO:
 
 Experiment:
-```bash
+```shell
 root@d6e5e8ac056e:/code# stat tmp
 File: tmp
 Size: 0               Blocks: 8          IO Block: 4096   regular file
