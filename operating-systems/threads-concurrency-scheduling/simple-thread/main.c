@@ -15,7 +15,6 @@ int main() {
 	pthread_create(&p1, NULL, thread_entry, NULL);
 	pthread_create(&p2, NULL, thread_entry, NULL);
 
-
 	// pthread_join blocks the execution of the parent 
 	// until the thread ends its execution.
 	// man page says it "suspends of execution of the
