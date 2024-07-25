@@ -11,3 +11,5 @@ Problem -> Questions -> Answers -> Code solution
 | What is a proxy?         | [question-answer.md] |                          |
 | What is IO Multiplexing? | [question-answer.md] | Code solving the problem |
 ```
+
+Basic resources are CS Primer and teachyourselfcs.com
