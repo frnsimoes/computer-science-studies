@@ -49,3 +49,16 @@ The bounds gives us protection. Check we are within address space. If the memory
 
 The bads of base and bounds: hard to allocate memory because you have to always find large chunks of memory (to allocate contiguous memory); hard to expand. Hard to share memory
 
+OS Roles: what happens at the time of a context switch? When the OS switches from process A to process B, it has to switch to A base/bounds to B base/bounds. So, the OS must save base/bounds.
+
+Segmentation: a better way to do this. Instead of having a single base/bounds, we have multiple base/bounds pairs. Each segment is a contiguous piece of memory. The OS keeps track of the base/bounds of each segment. The MMU has a segment table. The segment table has the base/bounds of each segment. The MMU has a segment number. The segment number is used to index the segment table. The MMU takes the base of the segment and adds the virtual address. The bounds is used to check if the address is in bounds.
+
+So the three main parts of an address space: code, heap and stack, doesnt need to be continguous. The OS can segment these three parts in physical memory.
+
+Segmentation allows for no waste (internal fragmentation), but: defrag still exists.
+
+OS roles still exist: save/restore base/bound pairs. Still intereact with malloc and defrag.
+
+Next lecture: segmentation in detail.
+
+Preview: which segment does the virtual address refer to?
