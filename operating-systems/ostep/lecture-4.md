@@ -21,3 +21,9 @@ Example of a very small 'toy' virtual addr space:
 
 What is a virtual address and its components?
 A virtual address consists of: a virtual page number (VPN) and an offset. This is translated into a physical frame number (PFN). THe offset is not translated at all. 
+
+How does translation occurr? 
+
+The hardware needs to know the location of the page table; page size, the structure pf the page entry.
+
+There is a per CPU register that holds address of the page table of the currently runnign process. It's called page table base register (PTBR)
