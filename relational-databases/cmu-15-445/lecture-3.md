@@ -33,4 +33,9 @@ there are three different notions of "page3s" in a dbms:
 - os page (usually 4kb, x64 2mb/1gb)
 - database page (512b-32kb)
 
+The hardware page is the smallest size of a block of data that the hw can garantee to read/write atomically. Databases have to handle this issue.
+
+
 **tuple layout**
+
+
